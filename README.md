@@ -1,4 +1,7 @@
-# ![Hero Icon](static/icon.svg)
+<!-- Centered Hero Icon -->
+<p align="center">
+  <img src="static/icon.svg" alt="Hero Icon" width="180" />
+</p>
 
 # Reprotection Dashboard
 

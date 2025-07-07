@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -13,10 +12,11 @@ import (
 )
 
 type ViewData struct {
-	User      string
-	Items     interface{}
-	Timestamp int64
-	ChartData string
+	User           string
+	Items          interface{}
+	Timestamp      int64
+	ChartData      string
+	WorkingProject *models.Project
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +26,26 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render(w, r, "index.html", items)
+	workingProject, _ := models.GetWorkingProject()
+	if workingProject == nil {
+		workingProject = &models.Project{ID: 1, WorkingProject: "(not set)"}
+	}
+
+	session, _ := config.Store.Get(r, "session")
+	username := ""
+	if v, ok := session.Values["username"].(string); ok {
+		username = v
+	}
+
+	viewData := ViewData{
+		User:           username,
+		Items:          items,
+		Timestamp:      time.Now().Unix(),
+		ChartData:      "",
+		WorkingProject: workingProject,
+	}
+
+	render(w, r, "index.html", viewData)
 }
 
 func Store(w http.ResponseWriter, r *http.Request) {
@@ -45,35 +64,14 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 }
 
 func render(w http.ResponseWriter, r *http.Request, file string, data interface{}) {
-	session, _ := config.Store.Get(r, "session")
-
-	username := ""
-	if v, ok := session.Values["username"].(string); ok {
-		username = v
-	}
+	// session, _ := config.Store.Get(r, "session")
 
 	tmpl := template.Must(template.ParseFiles(
 		"views/layout/layout.html",
 		"views/"+file,
 	))
 
-	// Convert items to JSON for chart data
-	var chartDataJSON string
-	if items, ok := data.([]models.Item); ok {
-		chartData, _ := json.Marshal(items)
-		chartDataJSON = string(chartData)
-	}
-
-	viewData := ViewData{
-		User:      username,
-		Items:     data,
-		Timestamp: time.Now().Unix(),
-		ChartData: chartDataJSON,
-	}
-
-
-
-	err := tmpl.Execute(w, viewData)
+	err := tmpl.Execute(w, data)
 	if err != nil {
 		fmt.Printf("Template execution error: %v\n", err)
 		http.Error(w, err.Error(), 500)

@@ -1,8 +1,9 @@
 package models
 
 import (
-	"golang.org/x/crypto/bcrypt"
 	"reprotection/config"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -10,6 +11,11 @@ type User struct {
 	Username           string
 	Password           string
 	MustChangePassword bool
+}
+
+type Project struct {
+	ID int
+	WorkingProject string
 }
 
 // Membuat user baru
@@ -59,5 +65,16 @@ func UpdateUserPassword(id int, newPassword string) error {
 		return err
 	}
 	_, err = config.DB.Exec("UPDATE users SET password = ?, must_change_password = FALSE WHERE id = ?", string(hashed), id)
+	return err
+}
+
+func GetWorkingProject() (*Project, error) {
+	var p Project
+	err := config.DB.QueryRow("SELECT id, working_project FROM config WHERE id = 1").Scan(&p.ID, &p.WorkingProject)
+	return &p, err
+}
+
+func CreateOrUpdateConfig(workingProject string) error {
+	_, err := config.DB.Exec("INSERT INTO config (id, working_project) VALUES (1, ?) ON DUPLICATE KEY UPDATE working_project = ?", workingProject, workingProject)
 	return err
 }

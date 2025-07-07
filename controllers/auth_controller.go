@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"html/template"
-	"net/http"
 	"log"
+	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
 

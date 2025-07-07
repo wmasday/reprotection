@@ -53,4 +53,10 @@ func Migrate() {
 			fmt.Println("⏩ Skipped:", filename)
 		}
 	}
+
+	// Seed config table if not exists
+	_, err = DB.Exec("INSERT IGNORE INTO config (id, working_project) VALUES (1, '/default/path')")
+	if err != nil {
+		panic(err)
+	}
 }

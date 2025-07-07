@@ -1,32 +1,29 @@
 {{ define "content" }}
 <h3 class="mt-5 pt-5 text-white">Dashboard</h3>
+<p class="text-secondary">Working Project: <span class="fw-bold text-white">{{.WorkingProject.WorkingProject}}</span>
+</p>
 <div class="row mt-3">
     <div class="col-sm-8">
         <input type="text" class="form-control search-input text-white" placeholder="Search blacklist keyword"
             id="search-input">
     </div>
-    <div class="col-1 text-start">
+    <div class="col-2 text-start">
         <button type="submit" name="search" class="btn btn-addign-secwords">
             <i class="bi bi-search"></i>
         </button>
-    </div>
+        <button type="submit" name="sync" class="btn btn-addign-secwords px-0 mx-2">
+            <i class="bi bi-arrow-repeat d-block"></i>
+        </button>
 
-    <div class="col-sm-1 text-end">
-        <button type="submit" name="sync" class="btn btn-addign-secwords px-0">
-            <i class="bi bi-arrow-repeat pe-2"></i> Sync
+        <button type="button" class="btn btn-addign-secwords mx-2" data-bs-toggle="modal"
+            data-bs-target="#addWorkingProjectModal">
+            <i class="bi bi-gear d-block"></i>
         </button>
     </div>
 
-    <div class="col-sm-2 text-start">
+    <div class="col-sm-2 text-center">
         <button type="button" class="btn btn-addign-secwords" data-bs-toggle="modal" data-bs-target="#addKeywordModal">
             <i class="bi bi-plus-lg me-2"></i>Add Keyword
-        </button>
-    </div>
-
-    <div class="col-sm-2 text-start">
-        <button type="button" class="btn btn-addign-secwords" data-bs-toggle="modal"
-            data-bs-target="#addWorkingProjectModal">
-            <i class="bi bi-gear me-2"></i>Set Working Project
         </button>
     </div>
 </div>
@@ -139,7 +136,8 @@
                     <div class="mb-3">
                         <label for="workingProjectInput" class="form-label">Working Project Path</label>
                         <input type="text" name="working_project" class="form-control search-input text-white"
-                            placeholder="Enter working project path" required>
+                            placeholder="Enter working project path" value="{{.WorkingProject.WorkingProject}}"
+                            required>
                     </div>
                 </div>
                 <div class="modal-footer">

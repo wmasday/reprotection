@@ -117,7 +117,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 📬 Contact
 
 - **Author:** Relyze Team by Recov
-- **Email:** [withmasday@example.com](mailto:withmasdayl@gmail.com)
+- **Email:** [withmasday@gmail.com](mailto:withmasdayl@gmail.com)
 - **GitHub:** [wmasday](https://github.com/wmasday)
 
 ---

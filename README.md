@@ -92,15 +92,7 @@ go run cmd/create_user/main.go
 go run main.go
 ```
 
-The dashboard will be available at [http://localhost:8080](http://localhost:8080)
-
----
-
-## 🖼️ Screenshots
-
-> Replace with your own screenshots for a better showcase!
-
-![Dashboard Screenshot](https://via.placeholder.com/900x500?text=Dashboard+Screenshot)
+The dashboard will be available at [http://localhost:1337](http://localhost:1337)
 
 ---
 
@@ -125,7 +117,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 📬 Contact
 
 - **Author:** Muhammad Hidayat
-- **Email:** [your.email@example.com](mailto:your.email@example.com)
+- **Email:** [withmasday@example.com](mailto:withmasdayl@example.com)
 - **GitHub:** [wmasday](https://github.com/wmasday)
 
 ---

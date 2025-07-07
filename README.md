@@ -116,8 +116,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 📬 Contact
 
-- **Author:** Muhammad Hidayat
-- **Email:** [withmasday@example.com](mailto:withmasdayl@example.com)
+- **Author:** Relyze Team by Recov
+- **Email:** [withmasday@example.com](mailto:withmasdayl@gmail.com)
 - **GitHub:** [wmasday](https://github.com/wmasday)
 
 ---

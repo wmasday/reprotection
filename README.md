@@ -1,4 +1,4 @@
-# ![Hero Image](static/hero.png)
+# ![Hero Icon](static/icon.svg)
 
 # Reprotection Dashboard
 
@@ -93,6 +93,14 @@ go run main.go
 ```
 
 The dashboard will be available at [http://localhost:1337](http://localhost:1337)
+
+---
+
+## 🖼️ Screenshots
+
+Below is a preview of the Reprotection Dashboard in action:
+
+![Dashboard Screenshot](static/hero.png)
 
 ---
 

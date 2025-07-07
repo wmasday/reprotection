@@ -62,7 +62,7 @@ reprotection/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/reprotection.git
+git clone https://github.com/wmasday/reprotection.git
 cd reprotection
 ```
 
@@ -126,7 +126,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - **Author:** Muhammad Hidayat
 - **Email:** [your.email@example.com](mailto:your.email@example.com)
-- **GitHub:** [yourusername](https://github.com/yourusername)
+- **GitHub:** [wmasday](https://github.com/wmasday)
 
 ---
 

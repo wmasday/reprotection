@@ -44,6 +44,8 @@ func main() {
 	http.HandleFunc("/store", middleware.Auth(controllers.Store))
 	http.HandleFunc("/delete", middleware.Auth(controllers.Delete))
 	http.HandleFunc("/config/store", middleware.Auth(controllers.StoreConfig))
+	http.HandleFunc("/detail", middleware.Auth(controllers.Detail))
+	http.HandleFunc("/sync", middleware.Auth(controllers.Sync))
 
 	// Running server
 	log.Println("🚀 Server running at http://localhost:" + port)

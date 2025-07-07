@@ -17,6 +17,7 @@
 
 body {
   font-family: "Sora", sans-serif;
+  background-color: var(--dark) !important;
 }
 
 /* Utility Background */
@@ -512,24 +513,6 @@ footer {
   margin-bottom: 0.3rem;
 }
 
-.blockchain-btn {
-  background: linear-gradient(90deg, #c4ff5a 0%, #3a548f 100%);
-  color: #101820;
-  font-weight: 700;
-  border: none;
-  border-radius: 10px;
-  padding: 0.7rem 1rem;
-  font-size: 1.1rem;
-  box-shadow: 0 2px 16px #c4ff5a40;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-}
-.blockchain-btn:hover,
-.blockchain-btn:focus {
-  background: linear-gradient(90deg, #3a548f 0%, #c4ff5a 100%);
-  color: #fff;
-  box-shadow: 0 4px 24px #c4ff5a40;
-}
-
 @media (max-width: 600px) {
   .blockchain-card {
     padding: 1.2rem;
@@ -580,6 +563,40 @@ footer {
   margin-top: 20px !important;
 }
 
-.modal-header, .modal-footer {
+.modal-header,
+.modal-footer {
   border-style: none !important;
+}
+
+.view-content-btn {
+  background: linear-gradient(
+    135deg,
+    rgba(196, 255, 90, 0.1) 0%,
+    rgba(58, 84, 143, 0.1) 100%
+  ) !important;
+  border: 1px solid rgba(196, 255, 90, 0.3) !important;
+  color: #c4ff5a !important;
+  border-radius: 8px !important;
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  backdrop-filter: blur(5px) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.3rem !important;
+}
+
+.view-content-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(196, 255, 90, 0.2) 0%,
+    rgba(58, 84, 143, 0.15) 100%
+  ) !important;
+  border-color: rgba(196, 255, 90, 0.5) !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(196, 255, 90, 0.2) !important;
+  text-decoration: none !important;
 }

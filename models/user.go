@@ -78,3 +78,26 @@ func CreateOrUpdateConfig(workingProject string) error {
 	_, err := config.DB.Exec("INSERT INTO config (id, working_project) VALUES (1, ?) ON DUPLICATE KEY UPDATE working_project = ?", workingProject, workingProject)
 	return err
 }
+
+func UpsertMalicious(itemID int, filepath string) error {
+	// Try update first
+	res, err := config.DB.Exec("UPDATE malicious SET filepath = ? WHERE item_id = ? AND filepath = ?", filepath, itemID, filepath)
+	affected, _ := res.RowsAffected()
+	if err == nil && affected > 0 {
+		return nil
+	}
+	// Insert if not exists
+	_, err = config.DB.Exec("INSERT INTO malicious (item_id, filepath) VALUES (?, ?)", itemID, filepath)
+	return err
+}
+
+func DeleteMaliciousByID(id int) error {
+	_, err := config.DB.Exec("DELETE FROM malicious WHERE id = ?", id)
+	return err
+}
+
+func CountMaliciousByItemID(itemID int) (int, error) {
+	var count int
+	err := config.DB.QueryRow("SELECT COUNT(*) FROM malicious WHERE item_id = ?", itemID).Scan(&count)
+	return count, err
+}

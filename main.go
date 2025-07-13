@@ -47,6 +47,13 @@ func main() {
 	http.HandleFunc("/detail", middleware.Auth(controllers.Detail))
 	http.HandleFunc("/sync", middleware.Auth(controllers.Sync))
 
+	// Blockchain routes
+	http.HandleFunc("/blockchain", middleware.Auth(controllers.BlacklistIndex))
+	http.HandleFunc("/blockchain/add", middleware.Auth(controllers.BlacklistAdd))
+	http.HandleFunc("/blockchain/remove", middleware.Auth(controllers.BlacklistRemove))
+	http.HandleFunc("/blockchain/check", middleware.Auth(controllers.BlacklistCheck))
+	http.HandleFunc("/blockchain/apply", middleware.Auth(controllers.BlacklistApply))
+
 	// Running server
 	log.Println("🚀 Server running at http://localhost:" + port)
 	err = http.ListenAndServe(":"+port, nil)

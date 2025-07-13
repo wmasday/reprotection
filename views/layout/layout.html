@@ -56,9 +56,36 @@
             {{ template "content" . }}
         </div>
     </main>
-    <footer class="text-center pt-5 pb-5">© 2025 - Recov</footer>
+    <footer class="text-center pt-5 pb-5">
+        &copy; 2025 Reproc Relyze by Recov - All rights reserved.
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="/static/js/bootstrap.js"></script>
+
+    <!-- Dynamic Navigation Active State -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href === currentPath) {
+                    link.classList.add('active');
+                }
+                // Handle root path special case
+                else if (currentPath === '/' && href === '/') {
+                    link.classList.add('active');
+                }
+                // Handle partial matches for sub-pages
+                else if (currentPath.startsWith(href) && href !== '/') {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

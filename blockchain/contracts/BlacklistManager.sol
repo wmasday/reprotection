@@ -2,140 +2,94 @@
 pragma solidity ^0.8.19;
 
 contract BlacklistManager {
-    struct BlacklistEntry {
+    struct Keyword {
         string keyword;
-        address createdBy;
+        address creator;
         string username;
         uint256 timestamp;
         bool isActive;
     }
     
-    struct Statistics {
-        uint256 totalApply;
-        uint256 totalVerify;
-        uint256 totalBlacklistEntries;
-    }
+    Keyword[] public keywords;
     
-    mapping(string => BlacklistEntry) public blacklistEntries;
-    mapping(address => string) public userUsernames;
-    mapping(address => uint256) public userCreatedEntries;
+    event KeywordAdded(string keyword, address creator, string username, uint256 timestamp);
+    event KeywordRemoved(string keyword, address creator, uint256 timestamp);
     
-    Statistics public stats;
-    
-    event BlacklistKeywordAdded(string keyword, address createdBy, string username, uint256 timestamp);
-    event BlacklistKeywordRemoved(string keyword, address removedBy, uint256 timestamp);
-    event UsernameSet(address user, string username);
-    event ApplyIncremented(address user, uint256 newTotal);
-    event VerifyIncremented(address user, uint256 newTotal);
-    
-    modifier onlyValidKeyword(string memory keyword) {
-        require(bytes(keyword).length > 0, "Keyword cannot be empty");
-        require(bytes(keyword).length <= 100, "Keyword too long");
+    modifier keywordExists(uint256 _index) {
+        require(_index < keywords.length, "Keyword does not exist");
         _;
     }
     
-    modifier onlyValidUsername(string memory username) {
-        require(bytes(username).length > 0, "Username cannot be empty");
-        require(bytes(username).length <= 50, "Username too long");
+    modifier onlyKeywordCreator(uint256 _index) {
+        require(keywords[_index].creator == msg.sender, "Only creator can modify keyword");
         _;
     }
     
-    function addBlacklistKeyword(string memory keyword, string memory username) 
-        public 
-        onlyValidKeyword(keyword) 
-        onlyValidUsername(username) 
-    {
-        require(!blacklistEntries[keyword].isActive, "Keyword already in blacklist");
+    function addKeyword(string memory _keyword, string memory _username) public {
+        require(bytes(_keyword).length > 0, "Keyword cannot be empty");
+        require(bytes(_keyword).length <= 100, "Keyword too long");
         
-        // Set username for the user if not already set
-        if (bytes(userUsernames[msg.sender]).length == 0) {
-            userUsernames[msg.sender] = username;
-            emit UsernameSet(msg.sender, username);
-        }
-        
-        blacklistEntries[keyword] = BlacklistEntry({
-            keyword: keyword,
-            createdBy: msg.sender,
-            username: userUsernames[msg.sender],
+        keywords.push(Keyword({
+            keyword: _keyword,
+            creator: msg.sender,
+            username: _username,
             timestamp: block.timestamp,
             isActive: true
-        });
+        }));
         
-        userCreatedEntries[msg.sender]++;
-        stats.totalBlacklistEntries++;
+        emit KeywordAdded(_keyword, msg.sender, _username, block.timestamp);
+    }
+    
+    function removeKeyword(uint256 _index) public keywordExists(_index) onlyKeywordCreator(_index) {
+        require(keywords[_index].isActive, "Keyword is already inactive");
         
-        emit BlacklistKeywordAdded(keyword, msg.sender, userUsernames[msg.sender], block.timestamp);
-    }
-    
-    function removeBlacklistKeyword(string memory keyword) public {
-        require(blacklistEntries[keyword].isActive, "Keyword not in blacklist");
-        require(blacklistEntries[keyword].createdBy == msg.sender, "Only creator can remove keyword");
+        keywords[_index].isActive = false;
         
-        blacklistEntries[keyword].isActive = false;
-        stats.totalBlacklistEntries--;
+        emit KeywordRemoved(keywords[_index].keyword, msg.sender, block.timestamp);
+    }
+    
+    function toggleKeyword(uint256 _index) public keywordExists(_index) onlyKeywordCreator(_index) {
+        keywords[_index].isActive = !keywords[_index].isActive;
         
-        emit BlacklistKeywordRemoved(keyword, msg.sender, block.timestamp);
+        if (keywords[_index].isActive) {
+            emit KeywordAdded(keywords[_index].keyword, msg.sender, keywords[_index].username, block.timestamp);
+        } else {
+            emit KeywordRemoved(keywords[_index].keyword, msg.sender, block.timestamp);
+        }
     }
     
-    function incrementApply() public {
-        stats.totalApply++;
-        emit ApplyIncremented(msg.sender, stats.totalApply);
-    }
-    
-    function incrementVerify() public {
-        stats.totalVerify++;
-        emit VerifyIncremented(msg.sender, stats.totalVerify);
-    }
-    
-    function setUsername(string memory username) public onlyValidUsername(username) {
-        userUsernames[msg.sender] = username;
-        emit UsernameSet(msg.sender, username);
-    }
-    
-    function getBlacklistEntry(string memory keyword) public view returns (
-        string memory keywordName,
-        address createdBy,
+    function getKeyword(uint256 _index) public view returns (
+        string memory keyword,
+        address creator,
         string memory username,
         uint256 timestamp,
         bool isActive
     ) {
-        BlacklistEntry memory entry = blacklistEntries[keyword];
-        return (
-            entry.keyword,
-            entry.createdBy,
-            entry.username,
-            entry.timestamp,
-            entry.isActive
-        );
+        require(_index < keywords.length, "Keyword does not exist");
+        Keyword memory k = keywords[_index];
+        return (k.keyword, k.creator, k.username, k.timestamp, k.isActive);
     }
     
-    function isKeywordBlacklisted(string memory keyword) public view returns (bool) {
-        return blacklistEntries[keyword].isActive;
+    function isKeywordActive(uint256 _index) public view returns (bool) {
+        require(_index < keywords.length, "Keyword does not exist");
+        return keywords[_index].isActive;
     }
     
-    function getStatistics() public view returns (
-        uint256 totalApply,
-        uint256 totalVerify,
-        uint256 totalBlacklistEntries
-    ) {
-        return (
-            stats.totalApply,
-            stats.totalVerify,
-            stats.totalBlacklistEntries
-        );
+    function getAllKeywords() public view returns (Keyword[] memory) {
+        return keywords;
     }
     
-    function getUserInfo(address user) public view returns (
-        string memory username,
-        uint256 createdEntries
-    ) {
-        return (
-            userUsernames[user],
-            userCreatedEntries[user]
-        );
+    function getKeywordCount() public view returns (uint256) {
+        return keywords.length;
     }
     
-    function getUsername(address user) public view returns (string memory) {
-        return userUsernames[user];
+    function getActiveKeywordCount() public view returns (uint256) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < keywords.length; i++) {
+            if (keywords[i].isActive) {
+                count++;
+            }
+        }
+        return count;
     }
 } 

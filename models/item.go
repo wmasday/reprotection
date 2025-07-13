@@ -41,7 +41,14 @@ func Create(title string) error {
 }
 
 func Delete(id int) error {
-	_, err := config.DB.Exec("DELETE FROM items WHERE id = ?", id)
+	// First delete all malicious records associated with this item
+	_, err := config.DB.Exec("DELETE FROM malicious WHERE item_id = ?", id)
+	if err != nil {
+		return err
+	}
+	
+	// Then delete the item
+	_, err = config.DB.Exec("DELETE FROM items WHERE id = ?", id)
 	return err
 }
 
